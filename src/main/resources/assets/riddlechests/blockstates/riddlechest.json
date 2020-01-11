@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "riddlechests:block/riddlechest" },
+    "facing=south": { "model": "riddlechests:block/riddlechest", "y": 180 },
+    "facing=west": { "model": "riddlechests:block/riddlechest", "y": 270 },
+    "facing=east": { "model": "riddlechests:block/riddlechest", "y": 90 }
+  }
+}

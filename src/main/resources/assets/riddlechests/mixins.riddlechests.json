@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "package": "com.davenonymous.riddlechests.core",
+  "refmap": "mixins.riddlechests.refmap.json",
+  "target": "@env(DEFAULT)",
+  "mixins": [
+    "MixinStructurePieces"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

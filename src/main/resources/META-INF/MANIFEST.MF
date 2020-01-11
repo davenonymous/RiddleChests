@@ -1,0 +1,1 @@
+MixinConnector: com.davenonymous.riddlechests.core.RiddleChestsMixinConnector

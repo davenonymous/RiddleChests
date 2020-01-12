@@ -46,3 +46,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DAVE_MAVEN_USER: ${{ secrets.DAVE_MAVEN_USER }}
         DAVE_MAVEN_PASSWORD: ${{ secrets.DAVE_MAVEN_PASSWORD }}
+        JARSIGN_KEY_PASS: ${{ secrets.JARSIGN_KEY_PASS }}

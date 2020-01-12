@@ -61,7 +61,7 @@ public class WorldGenEvents {
         }
 
         // Actually replace the chest
-        Logz.info("Replacing vanilla chest @ ", event.getPos());
+        Logz.info("Replacing vanilla chest @ {}", event.getPos());
 
         // Has original direction?
         Direction newDirection = Direction.byHorizontalIndex(event.getWorld().getRandom().nextInt(4));

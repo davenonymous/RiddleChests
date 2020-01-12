@@ -21,23 +21,15 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Create signing key
-      run: ./update-signature.sh
-      env:
-        GITHUB_BUILD: 1
-        JARSIGN_KEY_PASS: ${{ secrets.JARSIGN_KEY_PASS }}
-
     - name: Assemble
       run: ./gradlew assemble || ./gradlew assemble || ./gradlew assemble
       env:
         GITHUB_BUILD: 1
-        JARSIGN_KEY_PASS: ${{ secrets.JARSIGN_KEY_PASS }}
 
     - name: Build with Gradle
       run: ./gradlew build -S
       env:
         GITHUB_BUILD: 1
-        JARSIGN_KEY_PASS: ${{ secrets.JARSIGN_KEY_PASS }}
 
     - name: Publish to Github Packages
       run: ./gradlew publish
@@ -46,4 +38,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DAVE_MAVEN_USER: ${{ secrets.DAVE_MAVEN_USER }}
         DAVE_MAVEN_PASSWORD: ${{ secrets.DAVE_MAVEN_PASSWORD }}
-        JARSIGN_KEY_PASS: ${{ secrets.JARSIGN_KEY_PASS }}

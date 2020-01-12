@@ -1,3 +1,4 @@
+/*
 package com.davenonymous.riddlechests.core;
 
 import com.davenonymous.riddlechests.event.GenerateChestEvent;
@@ -31,3 +32,4 @@ public abstract class MixinStructurePieces {
         MinecraftForge.EVENT_BUS.post(new GenerateChestEvent(worldIn, posIn));
     }
 }
+*/

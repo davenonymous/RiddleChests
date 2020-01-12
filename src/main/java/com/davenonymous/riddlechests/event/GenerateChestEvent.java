@@ -2,6 +2,7 @@ package com.davenonymous.riddlechests.event;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 
 public class GenerateChestEvent extends Event {
@@ -19,5 +20,9 @@ public class GenerateChestEvent extends Event {
 
     public BlockPos getPos() {
         return pos;
+    }
+
+    public static void fireEvent(IWorld world, BlockPos pos) {
+        MinecraftForge.EVENT_BUS.post(new GenerateChestEvent(world, pos));
     }
 }

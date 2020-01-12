@@ -1,3 +1,4 @@
+/*
 package com.davenonymous.riddlechests.core;
 
 import org.spongepowered.asm.launch.MixinBootstrap;
@@ -11,3 +12,4 @@ public class RiddleChestsMixinConnector implements IMixinConnector {
         Mixins.addConfiguration("assets/riddlechests/mixins.riddlechests.json");
     }
 }
+*/

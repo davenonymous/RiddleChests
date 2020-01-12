@@ -3,7 +3,6 @@
 ALIAS=davenonymous/riddlechests
 
 KEYTOOL_BIN=keytool
-KEYTOOL_BIN=/f/dev/java/bin/keytool.exe
 
 rm -f ./keystore.pfx
 ${KEYTOOL_BIN} -genkey -alias ${ALIAS} \

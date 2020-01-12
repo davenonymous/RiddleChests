@@ -198,11 +198,12 @@ task signJar(type: SignJar, dependsOn: jar) {
 // Runs this task automatically when build is ran.
 build.dependsOn signJar
 
-def reobfFile = file("$buildDir/reobfJar/output.jar")
+def reobfFile = file("$buildDir/tmp/signJar/riddlechests-${version}.jar.signed.tmp")
 def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
-    builtBy 'reobfJar'
+    builtBy 'signJar'
 }
+reobfArtifact.extension = "jar"
 publishing {
     publications {
         mavenJava(MavenPublication) {

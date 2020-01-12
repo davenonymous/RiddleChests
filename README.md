@@ -48,15 +48,15 @@ You need to do at least two things:
 
 ```json
 {
-   "type" : "riddlechests:word"
-   "category" : "riddlechests:your_own_category",
-   "lang" : "en_us",
-   "original" : "ABASD BTDXU",
-   "riddle" : [
+   "type": "riddlechests:word",
+   "category": "riddlechests:your_own_category",
+   "lang": "en_us",
+   "original": "ABASD BTDXU",
+   "riddle": [
       "The first thing you do",
       "when you test something new"
    ],
-   "solution" : "HELLO WORLD",
+   "solution": "HELLO WORLD",
 }
 ```
 Place this file in the `openloader/data/riddlechests/recipes/riddles/your_own_category/` directory.

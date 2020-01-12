@@ -1,6 +1,9 @@
 {
   "block.riddlechests.riddlechest": "Riddle Chest",
 
+  "riddle_chest.command.cheat.not_looking_at_chest": "You need to look at a riddle chest when you run this command!",
+  "riddle_chest.command.cheat.solution_is": "The solution is: %s",
+
   "riddle_chest.solved": "Solved",
   "riddle_chest.unsolved": "Unsolved"
 }

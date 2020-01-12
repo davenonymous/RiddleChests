@@ -3,6 +3,7 @@ package com.davenonymous.riddlechests.setup;
 import com.davenonymous.libnonymous.utils.RecipeHelper;
 import com.davenonymous.riddlechests.RiddleChests;
 import com.davenonymous.riddlechests.block.RiddleChestBlock;
+import com.davenonymous.riddlechests.block.RiddleChestBlockItem;
 import com.davenonymous.riddlechests.block.RiddleChestTileEntity;
 import com.davenonymous.riddlechests.gui.OpenRiddleChestContainer;
 import com.davenonymous.riddlechests.loottable.LootTableMappingRecipeHelper;
@@ -39,7 +40,7 @@ public class RegistryEvents {
     public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
         Item.Properties properties = new Item.Properties().group(ItemGroup.DECORATIONS);
         IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(new BlockItem(ModObjects.RIDDLECHEST, properties).setRegistryName(RiddleChests.MODID, "riddlechest"));
+        registry.register(new RiddleChestBlockItem(ModObjects.RIDDLECHEST, properties).setRegistryName(RiddleChests.MODID, "riddlechest"));
     }
 
     @SubscribeEvent

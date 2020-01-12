@@ -7,8 +7,10 @@ import com.davenonymous.riddlechests.setup.ModObjects;
 import com.davenonymous.riddlechests.util.Logz;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
@@ -22,6 +24,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -141,5 +144,20 @@ public class RiddleChestTileEntity extends BaseTileEntity {
                 markDirty();
             }
         };
+    }
+
+    public NonNullList<ItemStack> getContentStacks() {
+        NonNullList<ItemStack> result = NonNullList.create();
+        handler.ifPresent(h -> {
+            for(int slot = 0; slot < h.getSlots(); slot++) {
+                ItemStack content = h.getStackInSlot(slot);
+                if(content.isEmpty()) {
+                    continue;
+                }
+
+                result.add(content.copy());
+            }
+        });
+        return result;
     }
 }

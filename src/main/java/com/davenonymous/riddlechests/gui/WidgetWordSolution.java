@@ -27,9 +27,12 @@ public class WidgetWordSolution extends WidgetPanel {
         int buttonDim = 20;
         int xOffset = 0;
         for(int pos = 0; pos < riddle.original.length(); pos++) {
+            String solutionChar = riddle.solution.substring(pos, pos+1);
+
+            String originalChar = riddle.original.substring(pos, pos+1);
             Set<String> validChoices = new HashSet<>();
-            validChoices.add(riddle.original.substring(pos, pos+1));
-            validChoices.add(riddle.solution.substring(pos, pos+1));
+            validChoices.add(originalChar);
+            validChoices.add(solutionChar);
             List<String> remainingChoices = choiceSet.stream().filter(c -> !validChoices.contains(c)).collect(Collectors.toList());
             while(validChoices.size() <= Config.ADDITIONAL_CHARS.get() && remainingChoices.size() > 0) {
                 int choice = seededRand.nextInt(remainingChoices.size());
@@ -51,6 +54,12 @@ public class WidgetWordSolution extends WidgetPanel {
                 this.fireEvent(new ValueChangedEvent<>(oldValue, newValue));
                 return WidgetEventResult.CONTINUE_PROCESSING;
             });
+
+            if(solutionChar.equals(" ")) {
+                selectButton.setEnabled(false);
+                selectButton.setVisible(false);
+            }
+
 
             charButtons.add(selectButton);
             this.add(selectButton);

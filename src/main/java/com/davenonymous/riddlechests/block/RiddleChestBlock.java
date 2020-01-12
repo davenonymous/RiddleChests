@@ -14,6 +14,7 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -38,7 +39,7 @@ public class RiddleChestBlock extends WaterloggedBaseBlock {
 
     public RiddleChestBlock() {
         super(Properties.create(Material.WOOD, MaterialColor.BROWN)
-            .hardnessAndResistance(50.0f, 1200.0f)
+            .hardnessAndResistance(15.0f, 1200.0f)
             .sound(SoundType.WOOD)
             .harvestTool(ToolType.AXE)
             .harvestLevel(2));
@@ -80,7 +81,7 @@ public class RiddleChestBlock extends WaterloggedBaseBlock {
         }
 
         if(worldIn.isRemote || !(player instanceof ServerPlayerEntity)) {
-            return false;
+            return true;
         }
 
         if(handIn != Hand.MAIN_HAND) {
@@ -107,7 +108,7 @@ public class RiddleChestBlock extends WaterloggedBaseBlock {
             return false;
         }
 
-        Networking.sendOpenRiddleChestPacketToClient(pos);
+        Networking.sendOpenRiddleChestPacketToClient((ServerPlayerEntity)player, pos);
         return true;
     }
 
@@ -115,9 +116,36 @@ public class RiddleChestBlock extends WaterloggedBaseBlock {
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
 
-        if (placer != null) {
-            world.setBlockState(pos, state.with(BlockStateProperties.HORIZONTAL_FACING, getFacingFromEntity(pos, placer, true)), 2);
+        if(placer == null) {
+            return;
         }
+
+        world.setBlockState(pos, state.with(BlockStateProperties.HORIZONTAL_FACING, getFacingFromEntity(pos, placer, true)), 2);
+        if(stack.hasTag()) {
+            RiddleChestTileEntity chestTile = getOwnTile(world, pos);
+            if(chestTile != null) {
+                ResourceLocation existingRiddle = ResourceLocation.tryCreate(stack.getTag().getString("riddle"));
+                chestTile.linkedRiddle = existingRiddle;
+                chestTile.solved = stack.getTag().getBoolean("solved");
+                chestTile.markDirty();
+                chestTile.notifyClients();
+            }
+        }
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        RiddleChestTileEntity chestTile = getOwnTile(worldIn, pos);
+        if(chestTile == null) {
+            super.onReplaced(state, worldIn, pos, newState, isMoving);
+            return;
+        }
+
+        if(chestTile.solved) {
+            InventoryHelper.dropItems(worldIn, pos, chestTile.getContentStacks());
+        }
+
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
     @Override

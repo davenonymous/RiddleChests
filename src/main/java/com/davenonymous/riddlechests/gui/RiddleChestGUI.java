@@ -2,12 +2,14 @@ package com.davenonymous.riddlechests.gui;
 
 import com.davenonymous.libnonymous.gui.framework.GUI;
 import com.davenonymous.libnonymous.gui.framework.GUIHelper;
+import com.davenonymous.libnonymous.gui.framework.event.KeyReleasedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.ValueChangedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetPanel;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetTextBox;
 import com.davenonymous.riddlechests.RiddleChests;
 import com.davenonymous.riddlechests.riddles.RiddleInfo;
+import com.davenonymous.riddlechests.util.Logz;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -23,6 +25,13 @@ public class RiddleChestGUI extends GUI {
         this.riddle = riddle;
 
         this.add(createPanel());
+
+        this.addListener(KeyReleasedEvent.class, (event, widget) -> {
+            if(event.keyCode == 69) {
+                Minecraft.getInstance().currentScreen.onClose();
+            }
+            return WidgetEventResult.CONTINUE_PROCESSING;
+        });
     }
 
     private WidgetPanel createPanel() {

@@ -2,7 +2,7 @@ package com.davenonymous.riddlechests.setup;
 
 
 import com.davenonymous.riddlechests.event.GenerateChestEvent;
-import com.davenonymous.riddlechests.util.Logz;
+import com.davenonymous.riddlechests.event.SetLootTableEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -10,13 +10,20 @@ import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class WorldGenEvents {
     private static Field FIELD_LOOTTABLE;
+    private static Map<Integer, Set<BlockPos>> alreadyProcessedChests;
 
     static {
         FIELD_LOOTTABLE = ObfuscationReflectionHelper.findField(LockableLootTileEntity.class, "field_184284_m");
@@ -35,9 +42,40 @@ public class WorldGenEvents {
         return null;
     }
 
-    @SubscribeEvent
-    public static void onGenerateChest(final GenerateChestEvent event) {
-        TileEntity tile = event.getWorld().getTileEntity(event.getPos());
+    private static void addProcessedChestPosition(WorldGenRegion world, BlockPos pos) {
+        if(alreadyProcessedChests == null) {
+            alreadyProcessedChests = new HashMap<>();
+        }
+
+        int dim = world.getDimension().getType().getId();
+        if(!alreadyProcessedChests.containsKey(dim)) {
+            alreadyProcessedChests.put(dim, new HashSet<>());
+        }
+
+        alreadyProcessedChests.get(dim).add(pos);
+    }
+
+    private static boolean alreadyProcessed(WorldGenRegion world, BlockPos pos) {
+        if(alreadyProcessedChests == null) {
+            return false;
+        }
+
+        int dim = world.getDimension().getType().getId();
+        if(!alreadyProcessedChests.containsKey(dim)) {
+            return false;
+        }
+
+        return alreadyProcessedChests.get(dim).contains(pos);
+    }
+
+    private static void tryReplaceChest(WorldGenRegion world, BlockPos pos) {
+        if(alreadyProcessed(world, pos)) {
+            return;
+        }
+
+        addProcessedChestPosition(world, pos);
+
+        TileEntity tile = world.getTileEntity(pos);
         if(tile == null) {
             return;
         }
@@ -55,23 +93,37 @@ public class WorldGenEvents {
         }
 
         // Check chance against config value
-        double rolled = event.getWorld().getRandom().nextDouble();
-        if(rolled > Config.CHANCE_TO_REPLACE_CHEST.get() && false) {
+        double rolled = world.getRandom().nextDouble();
+        if(rolled > Config.CHANCE_TO_REPLACE_CHEST.get()) {
             return;
         }
 
         // Actually replace the chest
 
         // Has original direction?
-        Direction newDirection = Direction.byHorizontalIndex(event.getWorld().getRandom().nextInt(4));
-        BlockState originalState = event.getWorld().getBlockState(event.getPos());
+        Direction newDirection = Direction.byHorizontalIndex(world.getRandom().nextInt(4));
+        BlockState originalState = world.getBlockState(pos);
         if(originalState.has(ChestBlock.FACING)) {
             newDirection = originalState.get(ChestBlock.FACING);
         }
 
         // Create blockstate and place in the world
         BlockState newState = ModObjects.RIDDLECHEST.getDefaultState().with(BlockStateProperties.HORIZONTAL_FACING, newDirection);
-        event.getWorld().removeBlock(event.getPos(), false);
-        event.getWorld().setBlockState(event.getPos(), newState, 3);
+        world.removeBlock(pos, false);
+        world.setBlockState(pos, newState, 3);
+    }
+
+    @SubscribeEvent
+    public static void onSetLootTable(final SetLootTableEvent event) {
+        if(event.getWorld() instanceof WorldGenRegion) {
+            tryReplaceChest((WorldGenRegion) event.getWorld(), event.getPos());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onGenerateChest(final GenerateChestEvent event) {
+        if(event.getWorld() instanceof WorldGenRegion) {
+            tryReplaceChest((WorldGenRegion) event.getWorld(), event.getPos());
+        }
     }
 }

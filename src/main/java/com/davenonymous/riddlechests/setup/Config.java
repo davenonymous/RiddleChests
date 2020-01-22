@@ -25,6 +25,7 @@ public class Config {
     public static ForgeConfigSpec.IntValue ADDITIONAL_CHARS;
     public static ForgeConfigSpec.DoubleValue CHANCE_TO_REPLACE_CHEST;
     public static ForgeConfigSpec.ConfigValue<List<String>> NEVER_REPLACE_LOOTTABLES;
+    public static ForgeConfigSpec.ConfigValue<List<String>> DISABLE_RIDDLE_CATEGORIES;
 
     static {
         COMMON_BUILDER.comment("General Settings").push(CATEGORY_GENERAL);
@@ -41,7 +42,7 @@ public class Config {
     private static void setupGeneralConfig(ForgeConfigSpec.Builder b) {
         ADDITIONAL_CHARS = b
             .comment("How many extra characters for each riddle?")
-            .defineInRange("extraChars", 6, 1, 25);
+            .defineInRange("extraChars", 9, 1, 25);
 
         CHANCE_TO_REPLACE_CHEST = b
             .comment("How likely is a vanilla loot chest being replaced by a riddle chest?")
@@ -49,7 +50,11 @@ public class Config {
 
         NEVER_REPLACE_LOOTTABLES = b
             .comment("Never replace vanilla chests that have one of these loot tables assigned")
-            .define("loottableBlacklist", Arrays.asList("minecraft:chests/shipwreck_map", "minecraft:chests/spawn_bonus_chest"));
+            .define("loottableBlacklist", Arrays.asList("minecraft:chests/shipwreck_map", "minecraft:chests/spawn_bonus_chest"), o -> true);
+
+        DISABLE_RIDDLE_CATEGORIES = b
+                .comment("Categories listed here will not be loaded. Add 'riddlechests:betrayal_at_krondor' to disable the built in riddles. Make sure to have at least one loaded category!")
+                .define("disableCategories", Arrays.asList(""), o -> true);
     }
 
     private static void setupClientConfig(ForgeConfigSpec.Builder b) {

@@ -1,4 +1,4 @@
-package com.davenonymous.riddlechests.loottable;
+package com.davenonymous.riddlechests.recipe.alphabets;
 
 import com.davenonymous.libnonymous.utils.RecipeData;
 import com.davenonymous.riddlechests.setup.ModObjects;
@@ -6,18 +6,13 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.HashSet;
-import java.util.Set;
-
-public class LootTableMappingInfo extends RecipeData {
+public class AlphabetInfo extends RecipeData {
     private final ResourceLocation id;
 
-    public ResourceLocation categoryId;
-    public Set<ResourceLocation> mappedLootTables;
+    public String validCharacters;
 
-    public LootTableMappingInfo(ResourceLocation id) {
+    public AlphabetInfo(ResourceLocation id) {
         this.id = id;
-        this.mappedLootTables = new HashSet<>();
     }
 
     @Override
@@ -27,11 +22,11 @@ public class LootTableMappingInfo extends RecipeData {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModObjects.lootTableMappingSerializer;
+        return ModObjects.alphabetSerializer;
     }
 
     @Override
     public IRecipeType<?> getType() {
-        return ModObjects.lootTableMappingRecipeType;
+        return ModObjects.alphabetRecipeType;
     }
 }

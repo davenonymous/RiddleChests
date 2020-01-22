@@ -8,8 +8,8 @@ import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetPanel;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetTextBox;
 import com.davenonymous.riddlechests.RiddleChests;
-import com.davenonymous.riddlechests.riddles.RiddleInfo;
-import com.davenonymous.riddlechests.util.Logz;
+import com.davenonymous.riddlechests.recipe.alphabets.AlphabetInfo;
+import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -19,10 +19,13 @@ public class RiddleChestGUI extends GUI {
     private static ResourceLocation backgroundTexture = new ResourceLocation(RiddleChests.MODID, "textures/gui/krondor.png");
 
     private final RiddleInfo riddle;
-    public RiddleChestGUI(RiddleInfo riddle, int width, int height) {
+    private final AlphabetInfo alphabet;
+
+    public RiddleChestGUI(RiddleInfo riddle, AlphabetInfo alphabet, int width, int height) {
         super(0, 0, width, height);
 
         this.riddle = riddle;
+        this.alphabet = alphabet;
 
         this.add(createPanel());
 
@@ -41,7 +44,7 @@ public class RiddleChestGUI extends GUI {
         panel.setWidth(this.width);
         panel.setHeight(this.height);
 
-        WidgetWordSolution wordInput = new WidgetWordSolution(riddle);
+        WidgetWordSolution wordInput = new WidgetWordSolution(riddle, alphabet);
         wordInput.setX((panel.width - wordInput.width) / 2);
         wordInput.addListener(ValueChangedEvent.class, (event, widget) -> {
             String newValue = (String) event.newValue;

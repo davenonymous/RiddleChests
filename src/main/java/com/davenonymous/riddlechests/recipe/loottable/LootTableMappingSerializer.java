@@ -1,4 +1,4 @@
-package com.davenonymous.riddlechests.loottable;
+package com.davenonymous.riddlechests.recipe.loottable;
 
 import com.davenonymous.riddlechests.RiddleChests;
 import com.google.gson.JsonElement;

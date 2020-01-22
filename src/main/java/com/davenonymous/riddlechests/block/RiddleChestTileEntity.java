@@ -2,7 +2,7 @@ package com.davenonymous.riddlechests.block;
 
 import com.davenonymous.libnonymous.base.BaseTileEntity;
 import com.davenonymous.libnonymous.serialization.Store;
-import com.davenonymous.riddlechests.riddles.RiddleInfo;
+import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
 import com.davenonymous.riddlechests.setup.ModObjects;
 import com.davenonymous.riddlechests.util.Logz;
 import com.google.common.collect.Lists;
@@ -24,7 +24,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -57,6 +56,11 @@ public class RiddleChestTileEntity extends BaseTileEntity {
 
     private void setNewRiddle() {
         cachedRiddle = ModObjects.riddleRecipeHelper.getRandomRecipe(this.world.getRecipeManager(), this.world.rand);
+        if(cachedRiddle == null) {
+            linkedRiddle = null;
+            return;
+        }
+
         linkedRiddle = cachedRiddle.getId();
         this.markDirty();
         this.notifyClients();

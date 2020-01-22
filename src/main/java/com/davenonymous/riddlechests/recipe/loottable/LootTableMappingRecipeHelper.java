@@ -1,11 +1,10 @@
-package com.davenonymous.riddlechests.loottable;
+package com.davenonymous.riddlechests.recipe.loottable;
 
 import com.davenonymous.libnonymous.base.BaseRecipeHelper;
 import com.davenonymous.riddlechests.setup.ModObjects;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 

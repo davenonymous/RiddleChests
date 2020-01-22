@@ -4,7 +4,7 @@ import com.davenonymous.libnonymous.base.BaseNamedContainerProvider;
 import com.davenonymous.libnonymous.base.WaterloggedBaseBlock;
 import com.davenonymous.riddlechests.gui.OpenRiddleChestContainer;
 import com.davenonymous.riddlechests.network.Networking;
-import com.davenonymous.riddlechests.riddles.RiddleInfo;
+import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;

@@ -7,7 +7,8 @@ import com.davenonymous.libnonymous.gui.framework.widgets.WidgetTextBox;
 import com.davenonymous.riddlechests.RiddleChests;
 import com.davenonymous.riddlechests.block.RiddleChestTileEntity;
 import com.davenonymous.riddlechests.network.Networking;
-import com.davenonymous.riddlechests.riddles.RiddleInfo;
+import com.davenonymous.riddlechests.recipe.alphabets.AlphabetInfo;
+import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
 import com.davenonymous.riddlechests.setup.ModObjects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
@@ -43,9 +44,15 @@ public class RiddleChestScreen extends WidgetScreen {
             return createErrorScreen("Oops. This chest has no riddle?! Tell Dave about this!");
         }
 
+        // Make sure the riddle knows what alphabet to use
+        AlphabetInfo alphabetInfo = ModObjects.alphabetRecipeHelper.getRecipe(RiddleChests.proxy.getClientWorld().getRecipeManager(), riddle.alphabet);
+        if(alphabetInfo == null) {
+            return createErrorScreen("Oops. Unknown alphabet for this riddle!");
+        }
+
         int height = (int) (Minecraft.getInstance().mainWindow.getHeight() / Minecraft.getInstance().mainWindow.getGuiScaleFactor());
         int width = (int) (Minecraft.getInstance().mainWindow.getWidth() / Minecraft.getInstance().mainWindow.getGuiScaleFactor());
-        RiddleChestGUI gui = new RiddleChestGUI(riddle, width, height);
+        RiddleChestGUI gui = new RiddleChestGUI(riddle, alphabetInfo, width, height);
         gui.addListener(RiddleSolvedEvent.class, (event, widget) -> {
             Networking.sendSolvedRiddleToServer(pos);
             return WidgetEventResult.HANDLED;

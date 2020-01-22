@@ -1,0 +1,6 @@
+{
+  "type": "riddlechests:alphabet",
+  "validChars": [
+    "0123456789"
+  ]
+}

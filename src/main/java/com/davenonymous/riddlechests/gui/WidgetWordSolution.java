@@ -5,7 +5,8 @@ import com.davenonymous.libnonymous.gui.framework.event.ValueChangedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetPanel;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetSelectButton;
-import com.davenonymous.riddlechests.riddles.RiddleInfo;
+import com.davenonymous.riddlechests.recipe.alphabets.AlphabetInfo;
+import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
 import com.davenonymous.riddlechests.setup.Config;
 import net.minecraft.util.SoundEvents;
 
@@ -13,15 +14,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class WidgetWordSolution extends WidgetPanel {
-    private static final String choices = "AAABCDEEEFGHIIIJKLMNOOOPQRSSTUUUVWXYZ";
-    private static final Set<String> choiceSet = new HashSet<>(Arrays.asList(choices.split("")));
-
     List<WidgetSelectButton<String>> charButtons = new ArrayList<>();
 
     String value;
 
-    public WidgetWordSolution(RiddleInfo riddle) {
+    public WidgetWordSolution(RiddleInfo riddle, AlphabetInfo alphabet) {
         this.value = riddle.original;
+
+        String choices = alphabet.validCharacters;
+        Set<String> choiceSet = new HashSet<>(Arrays.asList(choices.split("")));
+
         Random seededRand = new Random(riddle.randomSeed);
 
         int buttonDim = 20;

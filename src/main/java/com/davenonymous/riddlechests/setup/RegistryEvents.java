@@ -6,13 +6,14 @@ import com.davenonymous.riddlechests.block.RiddleChestBlock;
 import com.davenonymous.riddlechests.block.RiddleChestBlockItem;
 import com.davenonymous.riddlechests.block.RiddleChestTileEntity;
 import com.davenonymous.riddlechests.gui.OpenRiddleChestContainer;
-import com.davenonymous.riddlechests.loottable.LootTableMappingRecipeHelper;
-import com.davenonymous.riddlechests.loottable.LootTableMappingSerializer;
-import com.davenonymous.riddlechests.riddles.RiddleRecipeHelper;
-import com.davenonymous.riddlechests.riddles.RiddleSerializer;
+import com.davenonymous.riddlechests.recipe.alphabets.AlphabetRecipeHelper;
+import com.davenonymous.riddlechests.recipe.alphabets.AlphabetSerializer;
+import com.davenonymous.riddlechests.recipe.loottable.LootTableMappingRecipeHelper;
+import com.davenonymous.riddlechests.recipe.loottable.LootTableMappingSerializer;
+import com.davenonymous.riddlechests.recipe.riddles.RiddleRecipeHelper;
+import com.davenonymous.riddlechests.recipe.riddles.RiddleSerializer;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -62,6 +63,11 @@ public class RegistryEvents {
         ModObjects.lootTableMappingSerializer = new LootTableMappingSerializer();
         ModObjects.lootTableMappingRecipeHelper = new LootTableMappingRecipeHelper();
         registry.register(ModObjects.lootTableMappingSerializer);
+
+        ModObjects.alphabetRecipeType = RecipeHelper.registerRecipeType(new ResourceLocation(RiddleChests.MODID, "alphabet"));
+        ModObjects.alphabetSerializer = new AlphabetSerializer();
+        ModObjects.alphabetRecipeHelper = new AlphabetRecipeHelper();
+        registry.register(ModObjects.alphabetSerializer);
 
     }
 

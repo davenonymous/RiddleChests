@@ -2,9 +2,8 @@ package com.davenonymous.riddlechests.command;
 
 import com.davenonymous.libnonymous.utils.RaytraceHelper;
 import com.davenonymous.riddlechests.block.RiddleChestTileEntity;
-import com.davenonymous.riddlechests.riddles.RiddleInfo;
+import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
 import com.davenonymous.riddlechests.setup.ModObjects;
-import com.davenonymous.riddlechests.util.Logz;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;

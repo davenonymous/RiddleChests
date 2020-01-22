@@ -1,4 +1,4 @@
-package com.davenonymous.riddlechests.riddles;
+package com.davenonymous.riddlechests.recipe.riddles;
 
 import com.davenonymous.libnonymous.base.BaseRecipeHelper;
 import com.davenonymous.riddlechests.setup.ModObjects;

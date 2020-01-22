@@ -1,9 +1,9 @@
-package com.davenonymous.riddlechests.riddles;
+package com.davenonymous.riddlechests.recipe.riddles;
 
 import com.davenonymous.riddlechests.RiddleChests;
+import com.davenonymous.riddlechests.setup.Config;
 import com.davenonymous.riddlechests.util.Logz;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RiddleSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<RiddleInfo> {
+    private static final ResourceLocation defaultAlphabet = new ResourceLocation(RiddleChests.MODID, "alphabets/en_us");
     private static final String[] requiredProperties = new String[] {"lang", "category", "original", "solution", "riddle"};
 
     public RiddleSerializer() {
@@ -34,6 +35,18 @@ public class RiddleSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> i
         if(json.has("lang")) {
             info.lang = json.get("lang").getAsString();
         }
+
+        info.alphabet = defaultAlphabet;
+        if(json.has("alphabet")) {
+            info.alphabet = new ResourceLocation(json.get("alphabet").getAsString());
+        }
+
+        String category = json.get("category").getAsString();
+        if(Config.DISABLE_RIDDLE_CATEGORIES.get().contains(category)) {
+            Logz.debug("Skipping riddle '{}'! Category '{}' is disabled");
+            return null;
+        }
+
         info.category = new ResourceLocation(json.get("category").getAsString());
         info.original = json.get("original").getAsString();
         info.solution = json.get("solution").getAsString();

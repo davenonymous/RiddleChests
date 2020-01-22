@@ -1,4 +1,4 @@
-package com.davenonymous.riddlechests.riddles;
+package com.davenonymous.riddlechests.recipe.loottable;
 
 import com.davenonymous.libnonymous.utils.RecipeData;
 import com.davenonymous.riddlechests.setup.ModObjects;
@@ -6,22 +6,18 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-public class RiddleInfo extends RecipeData {
+public class LootTableMappingInfo extends RecipeData {
     private final ResourceLocation id;
 
-    public ResourceLocation category;
-    public String lang;
-    public String original;
-    public String solution;
-    public List<String> lines;
-    public long randomSeed;
+    public ResourceLocation categoryId;
+    public Set<ResourceLocation> mappedLootTables;
 
-    public RiddleInfo(ResourceLocation id) {
+    public LootTableMappingInfo(ResourceLocation id) {
         this.id = id;
-        this.lines = new ArrayList<>();
+        this.mappedLootTables = new HashSet<>();
     }
 
     @Override
@@ -31,11 +27,11 @@ public class RiddleInfo extends RecipeData {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModObjects.riddleRecipeSerializer;
+        return ModObjects.lootTableMappingSerializer;
     }
 
     @Override
     public IRecipeType<?> getType() {
-        return ModObjects.riddleRecipeType;
+        return ModObjects.lootTableMappingRecipeType;
     }
 }

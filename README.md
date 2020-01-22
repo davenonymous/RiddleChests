@@ -77,3 +77,41 @@ Repeat this step for each riddle you want to create.
 }
 ```
 Place this file in the `openloader/data/riddlechests/recipes/loottable_mappings/` directory.
+
+
+## I want to add riddles that are not latin based, what do I do?
+
+### Create your own alphabet
+
+You can configure your own alphabets with all unicode characters minecraft is supporting.
+This is very similiar to the above mentioned json files, so I will be rather brief:
+Place e.g. this file in `openloader/data/riddlechests/recipes/alphabets/hexadecimal.json`
+to create an alphabet `riddlechests:alphabets/hexadecimal` with only hexadecimal characters:
+```json
+{
+  "type": "riddlechests:alphabet",
+  "validChars": [
+    "0123456789ABCDEF"
+  ]
+}
+```
+Make sure the file is UTF-8 encoded! And pull requests for various languages are very welcome here!
+
+### Map your riddles to your alphabet
+
+This is easy as pie, just add an alphabet property to your riddle. Using the included numbers alphabet
+you could specify this riddle:
+```json
+{
+  "category" : "riddlechests:number_riddles",
+  "alphabet" : "riddlechests:alphabets/numbers",
+
+  "lang": "en_us",
+  "original" : "0000",
+  "riddle" : [
+    "Elite!"
+  ],
+  "solution" : "1337",
+  "type" : "riddlechests:word"
+}
+```

@@ -50,8 +50,8 @@ public class RiddleChestScreen extends WidgetScreen {
             return createErrorScreen("Oops. Unknown alphabet for this riddle!");
         }
 
-        int height = (int) (Minecraft.getInstance().mainWindow.getHeight() / Minecraft.getInstance().mainWindow.getGuiScaleFactor());
-        int width = (int) (Minecraft.getInstance().mainWindow.getWidth() / Minecraft.getInstance().mainWindow.getGuiScaleFactor());
+        int height = (int) (Minecraft.getInstance().getMainWindow().getHeight() / Minecraft.getInstance().getMainWindow().getGuiScaleFactor());
+        int width = (int) (Minecraft.getInstance().getMainWindow().getWidth() / Minecraft.getInstance().getMainWindow().getGuiScaleFactor());
         RiddleChestGUI gui = new RiddleChestGUI(riddle, alphabetInfo, width, height);
         gui.addListener(RiddleSolvedEvent.class, (event, widget) -> {
             Networking.sendSolvedRiddleToServer(pos);

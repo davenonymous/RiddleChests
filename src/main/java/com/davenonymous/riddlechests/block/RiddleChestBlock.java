@@ -74,23 +74,25 @@ public class RiddleChestBlock extends WaterloggedBaseBlock {
         return (RiddleChestTileEntity)te;
     }
 
+
+
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(player.isSneaking()) {
-            return false;
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if(player.isCrouching()) {
+            return ActionResultType.FAIL;
         }
 
         if(worldIn.isRemote || !(player instanceof ServerPlayerEntity)) {
-            return true;
+            return ActionResultType.SUCCESS;
         }
 
         if(handIn != Hand.MAIN_HAND) {
-            return false;
+            return ActionResultType.FAIL;
         }
 
         RiddleChestTileEntity chestTile = getOwnTile(worldIn, pos);
         if(chestTile == null) {
-            return false;
+            return ActionResultType.FAIL;
         }
 
         if(chestTile.solved) {
@@ -100,16 +102,16 @@ public class RiddleChestBlock extends WaterloggedBaseBlock {
                     new StringTextComponent("Riddle Chest"),
                     (id, inv, playerEntity) -> new OpenRiddleChestContainer(id, inv, worldIn, pos)
             ), pos);
-            return true;
+            return ActionResultType.SUCCESS;
         }
 
         RiddleInfo riddle = chestTile.getRiddle();
         if(riddle == null) {
-            return false;
+            return ActionResultType.FAIL;
         }
 
         Networking.sendOpenRiddleChestPacketToClient((ServerPlayerEntity)player, pos);
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -152,11 +154,6 @@ public class RiddleChestBlock extends WaterloggedBaseBlock {
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
         builder.add(BlockStateProperties.HORIZONTAL_FACING);
-    }
-
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
     }
 
     @Override

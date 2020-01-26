@@ -68,6 +68,7 @@ public class RiddleSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> i
     @Override
     public RiddleInfo read(ResourceLocation recipeId, PacketBuffer buffer) {
         RiddleInfo info = new RiddleInfo(recipeId);
+        info.alphabet = buffer.readResourceLocation();
         info.category = buffer.readResourceLocation();
         info.lang = buffer.readString();
         info.original = buffer.readString();
@@ -83,6 +84,7 @@ public class RiddleSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> i
 
     @Override
     public void write(PacketBuffer buffer, RiddleInfo recipe) {
+        buffer.writeResourceLocation(recipe.alphabet);
         buffer.writeResourceLocation(recipe.category);
         buffer.writeString(recipe.lang);
         buffer.writeString(recipe.original);

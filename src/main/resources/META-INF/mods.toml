@@ -69,6 +69,6 @@ Riddle Chests adds rare loot chests that only can be opened after a riddle has b
 [[dependencies.riddlechests]]
     modId="libnonymous"
     mandatory=true
-    versionRange="[1.0.4,)"
+    versionRange="[1.1.0,)"
     ordering="AFTER"
     side="BOTH"

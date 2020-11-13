@@ -1,0 +1,9 @@
+{
+  "block.riddlechests.riddlechest": "Загадочный сундук",
+
+  "riddle_chest.command.cheat.not_looking_at_chest": "Вам нужно посмотреть на Загадочный сундук, если Вы запустили эту команду!",
+  "riddle_chest.command.cheat.solution_is": "Ответ: %s",
+
+  "riddle_chest.solved": "Решённый",
+  "riddle_chest.unsolved": "Не решённый"
+}

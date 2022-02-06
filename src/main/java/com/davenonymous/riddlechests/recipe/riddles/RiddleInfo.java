@@ -1,10 +1,11 @@
 package com.davenonymous.riddlechests.recipe.riddles;
 
-import com.davenonymous.libnonymous.utils.RecipeData;
-import com.davenonymous.riddlechests.setup.ModObjects;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
+
+import com.davenonymous.libnonymous.base.RecipeData;
+import com.davenonymous.riddlechests.setup.Registration;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +32,12 @@ public class RiddleInfo extends RecipeData {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
-        return ModObjects.riddleRecipeSerializer;
+    public RecipeSerializer<?> getSerializer() {
+        return Registration.riddleRecipeSerializer.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
-        return ModObjects.riddleRecipeType;
+    public RecipeType<?> getType() {
+        return Registration.riddleRecipeType;
     }
 }

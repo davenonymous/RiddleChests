@@ -1,28 +1,29 @@
 package com.davenonymous.riddlechests.recipe.riddles;
 
 import com.davenonymous.riddlechests.RiddleChests;
-import com.davenonymous.riddlechests.setup.Config;
+
+import com.davenonymous.riddlechests.config.CommonConfig;
 import com.davenonymous.riddlechests.util.Logz;
 import com.google.gson.JsonObject;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RiddleSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<RiddleInfo> {
+public class RiddleSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<RiddleInfo> {
     private static final ResourceLocation defaultAlphabet = new ResourceLocation(RiddleChests.MODID, "alphabets/en_us");
     private static final String[] requiredProperties = new String[] {"lang", "category", "original", "solution", "riddle"};
 
     public RiddleSerializer() {
-        this.setRegistryName(new ResourceLocation(RiddleChests.MODID, "word"));
     }
 
     @Override
-    public RiddleInfo read(ResourceLocation recipeId, JsonObject json) {
+    public RiddleInfo fromJson(ResourceLocation recipeId, JsonObject json) {
         for(String required : requiredProperties) {
             if(!json.has(required)) {
                 Logz.info(String.format("Invalid riddle! Missing property: %s", required));
@@ -42,7 +43,7 @@ public class RiddleSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> i
         }
 
         String category = json.get("category").getAsString();
-        if(Config.DISABLE_RIDDLE_CATEGORIES.get().contains(category)) {
+        if(CommonConfig.DISABLE_RIDDLE_CATEGORIES.get().contains(category)) {
             Logz.debug("Skipping riddle '{}'! Category '{}' is disabled");
             return null;
         }
@@ -66,31 +67,33 @@ public class RiddleSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> i
 
     @Nullable
     @Override
-    public RiddleInfo read(ResourceLocation recipeId, PacketBuffer buffer) {
+    public RiddleInfo fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         RiddleInfo info = new RiddleInfo(recipeId);
         info.alphabet = buffer.readResourceLocation();
         info.category = buffer.readResourceLocation();
-        info.lang = buffer.readString();
-        info.original = buffer.readString();
-        info.solution = buffer.readString();
+        info.lang = buffer.readUtf();
+        info.original = buffer.readUtf();
+        info.solution = buffer.readUtf();
         info.randomSeed = stringToSeed(info.original + info.solution);
         info.lines = new ArrayList<>();
         int lineCount = buffer.readInt();
         for(int i = 0; i < lineCount; i++) {
-            info.lines.add(buffer.readString());
+            info.lines.add(buffer.readUtf());
         }
         return info;
     }
 
+
+
     @Override
-    public void write(PacketBuffer buffer, RiddleInfo recipe) {
+    public void toNetwork(FriendlyByteBuf buffer, RiddleInfo recipe) {
         buffer.writeResourceLocation(recipe.alphabet);
         buffer.writeResourceLocation(recipe.category);
-        buffer.writeString(recipe.lang);
-        buffer.writeString(recipe.original);
-        buffer.writeString(recipe.solution);
+        buffer.writeUtf(recipe.lang);
+        buffer.writeUtf(recipe.original);
+        buffer.writeUtf(recipe.solution);
         buffer.writeInt(recipe.lines.size());
-        recipe.lines.forEach(s -> buffer.writeString(s));
+        recipe.lines.forEach(buffer::writeUtf);
     }
 
     private static long stringToSeed(String s) {

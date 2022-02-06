@@ -1,12 +1,13 @@
 package com.davenonymous.riddlechests.network;
 
 import com.davenonymous.riddlechests.RiddleChests;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
+
 
 public class Networking {
     public static SimpleChannel INSTANCE;
@@ -28,7 +29,7 @@ public class Networking {
         INSTANCE.sendToServer(new PacketSolvedRiddle(pos));
     }
 
-    public static void sendOpenRiddleChestPacketToClient(ServerPlayerEntity player, BlockPos pos) {
-        INSTANCE.sendTo(new PacketOpenRiddleGUI(pos), player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+    public static void sendOpenRiddleChestPacketToClient(ServerPlayer player, BlockPos pos) {
+        INSTANCE.sendTo(new PacketOpenRiddleGUI(pos), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 }

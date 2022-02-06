@@ -1,10 +1,11 @@
 package com.davenonymous.riddlechests.recipe.riddles;
 
-import com.davenonymous.libnonymous.base.BaseRecipeHelper;
-import com.davenonymous.riddlechests.setup.ModObjects;
+
+import com.davenonymous.libnonymous.helper.BaseRecipeHelper;
+import com.davenonymous.riddlechests.setup.Registration;
 
 public class RiddleRecipeHelper extends BaseRecipeHelper<RiddleInfo> {
     public RiddleRecipeHelper() {
-        super(ModObjects.riddleRecipeType);
+        super(Registration.riddleRecipeType);
     }
 }

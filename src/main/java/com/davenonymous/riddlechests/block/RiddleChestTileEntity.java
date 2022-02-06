@@ -1,34 +1,32 @@
 package com.davenonymous.riddlechests.block;
 
-import com.davenonymous.libnonymous.base.BaseTileEntity;
+import com.davenonymous.libnonymous.base.BaseBlockEntity;
 import com.davenonymous.libnonymous.serialization.Store;
 import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
-import com.davenonymous.riddlechests.setup.ModObjects;
+import com.davenonymous.riddlechests.setup.Registration;
 import com.davenonymous.riddlechests.util.Logz;
 import com.google.common.collect.Lists;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameterSets;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraft.world.storage.loot.LootTable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class RiddleChestTileEntity extends BaseTileEntity {
+public class RiddleChestTileEntity extends BaseBlockEntity<RiddleChestTileEntity> {
     @Store(storeWithItem = true, sendInUpdatePackage = true)
     public boolean solved;
 
@@ -39,13 +37,13 @@ public class RiddleChestTileEntity extends BaseTileEntity {
 
     public RiddleInfo cachedRiddle;
 
-    public RiddleChestTileEntity() {
-        super(ModObjects.RIDDLECHEST_TILE);
+    public RiddleChestTileEntity(BlockPos pos, BlockState state) {
+        super(Registration.RIDDLECHEST_BLOCKENTITY.get(), pos, state);
     }
 
     public RiddleInfo getRiddle() {
         if(cachedRiddle == null && linkedRiddle != null) {
-            cachedRiddle = ModObjects.riddleRecipeHelper.getRecipe(this.world.getRecipeManager(), linkedRiddle);
+            cachedRiddle = Registration.riddleRecipeHelper.getRecipe(this.level.getRecipeManager(), linkedRiddle);
             if(cachedRiddle == null) {
                 setNewRiddle();
             }
@@ -55,14 +53,14 @@ public class RiddleChestTileEntity extends BaseTileEntity {
     }
 
     private void setNewRiddle() {
-        cachedRiddle = ModObjects.riddleRecipeHelper.getRandomRecipe(this.world.getRecipeManager(), this.world.rand);
+        cachedRiddle = Registration.riddleRecipeHelper.getRandomRecipe(this.level.getRecipeManager(), this.level.random);
         if(cachedRiddle == null) {
             linkedRiddle = null;
             return;
         }
 
         linkedRiddle = cachedRiddle.getId();
-        this.markDirty();
+        this.setChanged();
         this.notifyClients();
     }
 
@@ -77,15 +75,16 @@ public class RiddleChestTileEntity extends BaseTileEntity {
 
 
 
-    public void generateLoot(ServerPlayerEntity player) {
+    public void generateLoot(ServerPlayer player) {
         handler.ifPresent(handler -> {
             List<Integer> list = Lists.newArrayList();
             for(int i = 0; i < handler.getSlots(); ++i) {
                 list.add(i);
             }
 
-            Collections.shuffle(list, this.world.rand);
+            Collections.shuffle(list, this.level.random);
 
+            /*
             Set<ResourceLocation> lootTableIds = ModObjects.lootTableMappingRecipeHelper.getLootTablesForCategory(cachedRiddle.category, this.world.getRecipeManager());
             for(ResourceLocation lootTableId : lootTableIds) {
                 LootTable lootTable = this.world.getServer().getLootTableManager().getLootTableFromLocation(lootTableId);
@@ -113,39 +112,25 @@ public class RiddleChestTileEntity extends BaseTileEntity {
                 });
             }
 
+             */
+
         });
     }
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return handler.cast();
         }
         return super.getCapability(cap, side);
     }
 
-    @Override
-    public void read(CompoundNBT tag) {
-        CompoundNBT invTag = tag.getCompound("inv");
-        handler.ifPresent(h -> h.deserializeNBT(invTag));
-        super.read(tag);
-    }
-
-    @Override
-    public CompoundNBT write(CompoundNBT tag) {
-        handler.ifPresent(h -> {
-            CompoundNBT compound = h.serializeNBT();
-            tag.put("inv", compound);
-        });
-        return super.write(tag);
-    }
-
     private ItemStackHandler createHandler() {
         return new ItemStackHandler(6 * 9) {
             @Override
             protected void onContentsChanged(int slot) {
-                markDirty();
+                setChanged();
             }
         };
     }

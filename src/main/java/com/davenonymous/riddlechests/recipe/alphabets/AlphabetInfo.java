@@ -1,10 +1,10 @@
 package com.davenonymous.riddlechests.recipe.alphabets;
 
-import com.davenonymous.libnonymous.utils.RecipeData;
-import com.davenonymous.riddlechests.setup.ModObjects;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
+import com.davenonymous.libnonymous.base.RecipeData;
+import com.davenonymous.riddlechests.setup.Registration;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 public class AlphabetInfo extends RecipeData {
     private final ResourceLocation id;
@@ -21,12 +21,12 @@ public class AlphabetInfo extends RecipeData {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
-        return ModObjects.alphabetSerializer;
+    public RecipeSerializer<?> getSerializer() {
+        return Registration.alphabetSerializer.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
-        return ModObjects.alphabetRecipeType;
+    public RecipeType<?> getType() {
+        return Registration.alphabetRecipeType;
     }
 }

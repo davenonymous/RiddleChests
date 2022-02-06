@@ -2,9 +2,9 @@ package com.davenonymous.riddlechests.network;
 
 import com.davenonymous.libnonymous.base.BasePacket;
 import com.davenonymous.libnonymous.serialization.Sync;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -17,7 +17,7 @@ public class PacketOpenRiddleGUI extends BasePacket {
         this.pos = pos;
     }
 
-    public PacketOpenRiddleGUI(PacketBuffer buf) {
+    public PacketOpenRiddleGUI(FriendlyByteBuf buf) {
         super(buf);
     }
 

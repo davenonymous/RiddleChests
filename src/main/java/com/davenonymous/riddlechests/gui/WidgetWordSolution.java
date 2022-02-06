@@ -5,10 +5,10 @@ import com.davenonymous.libnonymous.gui.framework.event.ValueChangedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetPanel;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetSelectButton;
+import com.davenonymous.riddlechests.config.CommonConfig;
 import com.davenonymous.riddlechests.recipe.alphabets.AlphabetInfo;
 import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
-import com.davenonymous.riddlechests.setup.Config;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,7 +36,7 @@ public class WidgetWordSolution extends WidgetPanel {
             validChoices.add(originalChar);
             validChoices.add(solutionChar);
             List<String> remainingChoices = choiceSet.stream().filter(c -> !validChoices.contains(c)).collect(Collectors.toList());
-            while(validChoices.size() <= Config.ADDITIONAL_CHARS.get() && remainingChoices.size() > 0) {
+            while(validChoices.size() <= CommonConfig.ADDITIONAL_CHARS.get() && remainingChoices.size() > 0) {
                 int choice = seededRand.nextInt(remainingChoices.size());
                 validChoices.add(remainingChoices.get(choice));
                 remainingChoices.remove(choice);

@@ -10,10 +10,13 @@ import com.davenonymous.libnonymous.gui.framework.widgets.WidgetTextBox;
 import com.davenonymous.riddlechests.RiddleChests;
 import com.davenonymous.riddlechests.recipe.alphabets.AlphabetInfo;
 import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
+
 
 public class RiddleChestGUI extends GUI {
     private static ResourceLocation backgroundTexture = new ResourceLocation(RiddleChests.MODID, "textures/gui/krondor.png");
@@ -31,7 +34,7 @@ public class RiddleChestGUI extends GUI {
 
         this.addListener(KeyReleasedEvent.class, (event, widget) -> {
             if(event.keyCode == 69) {
-                Minecraft.getInstance().currentScreen.onClose();
+                Minecraft.getInstance().screen.onClose();
             }
             return WidgetEventResult.CONTINUE_PROCESSING;
         });
@@ -64,7 +67,7 @@ public class RiddleChestGUI extends GUI {
         for(String line : riddle.lines) {
             WidgetTextBox textBox = new WidgetTextBox(line, 0xAAAAAA);
 
-            int width = Minecraft.getInstance().fontRenderer.getStringWidth(line);
+            int width = Minecraft.getInstance().font.width(line);
             int xOffset = (linesPanel.width - width) / 2;
 
             textBox.setWidth(width);
@@ -87,15 +90,15 @@ public class RiddleChestGUI extends GUI {
         return panel;
     }
 
+
     @Override
-    protected void drawWindow(Screen screen) {
-        super.drawWindow(screen);
+    protected void drawWindow(PoseStack pPoseStack, Screen screen) {
+        super.drawWindow(pPoseStack, screen);
 
-        GlStateManager.disableLighting();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, backgroundTexture);
 
-        GlStateManager.color4f(1f, 1f, 1f, 1f);
-        screen.getMinecraft().getTextureManager().bindTexture(backgroundTexture);
-
-        GUIHelper.drawStretchedTexture(0, 0, this.width, this.height, 0, 0, 256, 256);
+        GUIHelper.drawStretchedTexture(pPoseStack, 0, 0, this.width, this.height, 0, 0, 256, 256);
     }
 }

@@ -1,38 +1,34 @@
 package com.davenonymous.riddlechests.command;
 
-import com.davenonymous.libnonymous.utils.RaytraceHelper;
+
 import com.davenonymous.riddlechests.block.RiddleChestTileEntity;
 import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
-import com.davenonymous.riddlechests.setup.ModObjects;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
-public class CommandCheat implements Command<CommandSource> {
+public class CommandCheat implements Command<CommandSourceStack> {
     private static final CommandCheat CMD = new CommandCheat();
 
-    public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
+    public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher) {
         return Commands.literal("cheat")
-                .requires(cs -> cs.hasPermissionLevel(2))
+                .requires(cs -> cs.hasPermission(2))
                 .executes(CMD);
     }
 
 
     @Override
-    public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
-        ServerWorld world = context.getSource().getWorld();
+    public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        var world = context.getSource().getLevel();
 
-        BlockRayTraceResult trace = RaytraceHelper.rayTrace(context.getSource().getWorld(), context.getSource().asPlayer());
-        BlockPos tracePos = trace.getPos();
+        /*
+        var trace = RaytraceHelper.rayTrace(context.getSource().getWorld(), context.getSource().asPlayer());
+        var tracePos = trace.getPos();
 
         RiddleChestTileEntity tileChest = ModObjects.RIDDLECHEST.getOwnTile(world, tracePos);
         if(tileChest == null) {
@@ -47,6 +43,7 @@ public class CommandCheat implements Command<CommandSource> {
         }
 
         context.getSource().sendFeedback(new TranslationTextComponent("riddle_chest.command.cheat.solution_is", riddle.solution.toUpperCase()), false);
+        */
         return 0;
     }
 }

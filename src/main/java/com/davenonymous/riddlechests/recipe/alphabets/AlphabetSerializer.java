@@ -4,22 +4,21 @@ import com.davenonymous.riddlechests.RiddleChests;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class AlphabetSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<AlphabetInfo> {
+public class AlphabetSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AlphabetInfo> {
     private static final String[] requiredProperties = new String[] { "validChars" };
 
     public AlphabetSerializer() {
-        this.setRegistryName(RiddleChests.MODID, "alphabet");
     }
 
     @Override
-    public AlphabetInfo read(ResourceLocation recipeId, JsonObject json) {
+    public AlphabetInfo fromJson(ResourceLocation recipeId, JsonObject json) {
         for(String required : requiredProperties) {
             if(!json.has(required)) {
                 throw new JsonParseException(String.format("Invalid alphabet! Missing property: %s", required));
@@ -41,14 +40,14 @@ public class AlphabetSerializer extends ForgeRegistryEntry<IRecipeSerializer<?>>
 
     @Nullable
     @Override
-    public AlphabetInfo read(ResourceLocation recipeId, PacketBuffer buffer) {
+    public AlphabetInfo fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         AlphabetInfo result = new AlphabetInfo(recipeId);
-        result.validCharacters = buffer.readString();
+        result.validCharacters = buffer.readUtf();
         return result;
     }
 
     @Override
-    public void write(PacketBuffer buffer, AlphabetInfo recipe) {
-        buffer.writeString(recipe.validCharacters);
+    public void toNetwork(FriendlyByteBuf buffer, AlphabetInfo recipe) {
+        buffer.writeUtf(recipe.validCharacters);
     }
 }

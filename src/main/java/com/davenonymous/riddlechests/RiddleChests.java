@@ -1,59 +1,39 @@
 package com.davenonymous.riddlechests;
 
-import com.davenonymous.libnonymous.setup.IProxy;
-import com.davenonymous.riddlechests.command.ModCommands;
-import com.davenonymous.riddlechests.network.Networking;
-import com.davenonymous.riddlechests.proxy.ProxyClient;
-import com.davenonymous.riddlechests.proxy.ProxyServer;
-import com.davenonymous.riddlechests.recipe.loottable.LootTableMappingRecipeHelper;
-import com.davenonymous.riddlechests.setup.Config;
-import com.davenonymous.riddlechests.setup.ModObjects;
-import com.davenonymous.riddlechests.setup.WorldGenEvents;
-import com.davenonymous.riddlechests.util.Logz;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
+import com.davenonymous.riddlechests.config.CommonConfig;
+import com.davenonymous.riddlechests.setup.ClientSetup;
+import com.davenonymous.riddlechests.setup.ForgeEventHandlers;
+import com.davenonymous.riddlechests.setup.ModSetup;
+import com.davenonymous.riddlechests.setup.Registration;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(RiddleChests.MODID)
 public class RiddleChests {
+    public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "riddlechests";
 
-    public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyServer());
-
     public RiddleChests() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
+        CommonConfig.register();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        MinecraftForge.EVENT_BUS.register(this);
+        Registration.init();
 
-        Config.loadConfig(Config.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(MODID + "-client.toml"));
-        Config.loadConfig(Config.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(MODID + "-common.toml"));
+        MinecraftForge.EVENT_BUS.register(new ForgeEventHandlers());
+
+        IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
+        modbus.addListener(ModSetup::init);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modbus.addListener(ClientSetup::init));
+
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-        Networking.registerMessages();
-        MinecraftForge.EVENT_BUS.register(WorldGenEvents.class);
-        proxy.init();
-    }
 
-    @SubscribeEvent
-    public void serverLoad(FMLServerStartingEvent event) {
-        ModCommands.register(event.getCommandDispatcher());
-    }
-
+    /*
     @SubscribeEvent(priority = EventPriority.LOW)
     public void startServer(FMLServerAboutToStartEvent event) {
         IReloadableResourceManager manager = event.getServer().getResourceManager();
@@ -76,4 +56,6 @@ public class RiddleChests {
             );
         });
     }
+
+     */
 }

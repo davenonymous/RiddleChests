@@ -10,11 +10,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -84,25 +89,24 @@ public class RiddleChestTileEntity extends BaseBlockEntity<RiddleChestTileEntity
 
             Collections.shuffle(list, this.level.random);
 
-            /*
-            Set<ResourceLocation> lootTableIds = ModObjects.lootTableMappingRecipeHelper.getLootTablesForCategory(cachedRiddle.category, this.world.getRecipeManager());
+            Set<ResourceLocation> lootTableIds = Registration.lootMappingRecipeHelper.getLootTablesForCategory(cachedRiddle.category, this.level.getRecipeManager());
             for(ResourceLocation lootTableId : lootTableIds) {
-                LootTable lootTable = this.world.getServer().getLootTableManager().getLootTableFromLocation(lootTableId);
+                LootTable lootTable = this.level.getServer().getLootTables().get(lootTableId);
                 if(lootTable == null) {
                     Logz.warn("While generating riddle chest loot: Loottable '{}' does not exist. Check the loottable mapping of '{}'.", lootTableId, cachedRiddle.category);
                     continue;
                 }
 
-                LootContext.Builder builder = new LootContext.Builder((ServerWorld)this.world)
-                        .withParameter(LootParameters.POSITION, new BlockPos(this.pos))
-                        .withSeed(this.world.rand.nextLong());
+                LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level)
+                        .withParameter(LootContextParams.ORIGIN, new Vec3(getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ()))
+                        .withOptionalRandomSeed(this.level.random.nextLong());
 
                 if (player != null) {
-                    builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player);
+                    builder.withLuck(player.getLuck()).withParameter(LootContextParams.THIS_ENTITY, player);
                 }
-                LootContext lootContext = builder.build(LootParameterSets.CHEST);
+                LootContext lootContext = builder.create(LootContextParamSets.CHEST);
 
-                lootTable.generate(lootContext, itemStack -> {
+                lootTable.getRandomItemsRaw(lootContext, itemStack -> {
                     if(list.size() <= 0) {
                         return;
                     }
@@ -111,8 +115,6 @@ public class RiddleChestTileEntity extends BaseBlockEntity<RiddleChestTileEntity
                     handler.insertItem(slotToFill, itemStack, false);
                 });
             }
-
-             */
 
         });
     }

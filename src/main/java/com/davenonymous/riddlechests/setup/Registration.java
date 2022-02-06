@@ -8,6 +8,9 @@ import com.davenonymous.riddlechests.gui.RiddleChestContainer;
 import com.davenonymous.riddlechests.recipe.alphabets.AlphabetInfo;
 import com.davenonymous.riddlechests.recipe.alphabets.AlphabetRecipeHelper;
 import com.davenonymous.riddlechests.recipe.alphabets.AlphabetSerializer;
+import com.davenonymous.riddlechests.recipe.loottable.LootTableMappingInfo;
+import com.davenonymous.riddlechests.recipe.loottable.LootTableMappingRecipeHelper;
+import com.davenonymous.riddlechests.recipe.loottable.LootTableMappingSerializer;
 import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
 import com.davenonymous.riddlechests.recipe.riddles.RiddleRecipeHelper;
 import com.davenonymous.riddlechests.recipe.riddles.RiddleSerializer;
@@ -51,6 +54,11 @@ public class Registration {
 	public static RecipeType<AlphabetInfo> alphabetRecipeType;
 	public static AlphabetRecipeHelper alphabetRecipeHelper;
 	public static final RegistryObject<RecipeSerializer<?>> alphabetSerializer  = RECIPE_SERIALIZERS.register("alphabet", () -> new AlphabetSerializer());
+
+	public static RecipeType<LootTableMappingInfo> lootMappingRecipeType;
+	public static LootTableMappingRecipeHelper lootMappingRecipeHelper;
+	public static final RegistryObject<RecipeSerializer<?>> lootMappingSerializer  = RECIPE_SERIALIZERS.register("loottable_mapping", () -> new LootTableMappingSerializer());
+
 
 	public static final Item.Properties ITEM_PROPERTIES = new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS);
 

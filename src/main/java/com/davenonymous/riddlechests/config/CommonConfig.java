@@ -1,6 +1,8 @@
 package com.davenonymous.riddlechests.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,8 @@ public class CommonConfig {
 		setupGeneralConfig(COMMON_BUILDER);
 		COMMON_BUILDER.pop();
 		COMMON_CONFIG = COMMON_BUILDER.build();
+
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG);
 	}
 
 	private static void setupGeneralConfig(ForgeConfigSpec.Builder b) {

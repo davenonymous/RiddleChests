@@ -4,7 +4,8 @@
    "original" : "TOLIELIOE",
    "riddle" : [
       "Every creature in the world has seen it",
-      "But to their dying day they'll never see the same one again"
+      "But to their dying day",
+      "they'll never see the same one again"
    ],
    "solution" : "YESTERDAY",
    "type" : "riddlechests:word"

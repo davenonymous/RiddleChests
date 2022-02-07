@@ -5,7 +5,8 @@
    "riddle" : [
       "It flies without wings",
       "Strikes without beak teeth or talons",
-      "It has no eyes in its pointed head but it can kill birds in flight"
+      "It has no eyes in its pointed head",
+      "but it can kill birds in flight"
    ],
    "solution" : "ARROW",
    "type" : "riddlechests:word"

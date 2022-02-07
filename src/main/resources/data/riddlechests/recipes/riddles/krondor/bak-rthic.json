@@ -3,8 +3,10 @@
    "lang" : "en_us",
    "original" : "RTHIC",
    "riddle" : [
-      "This wondrous thing though not a herb can help comfort the weak and the dying",
-      "It can even be used to rally the troops or make one start laughing or crying"
+      "This wondrous thing though not a herb",
+      "can help comfort the weak and the dying",
+      "It can even be used to rally the troops",
+      "or make one start laughing or crying"
    ],
    "solution" : "MUSIC",
    "type" : "riddlechests:word"

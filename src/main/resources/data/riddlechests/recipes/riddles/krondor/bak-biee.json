@@ -3,8 +3,10 @@
    "lang" : "en_us",
    "original" : "BIEE",
    "riddle" : [
-      "You can count on them though some would rather curse them",
-      "You can speak dear to them though well all know tis just in vain"
+      "You can count on them",
+      "though some would rather curse them",
+      "You can speak dear to them",
+      "though we'll all know tis just in vain"
    ],
    "solution" : "DICE",
    "type" : "riddlechests:word"

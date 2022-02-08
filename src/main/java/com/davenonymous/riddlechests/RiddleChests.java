@@ -7,7 +7,9 @@ import com.davenonymous.riddlechests.setup.ModSetup;
 import com.davenonymous.riddlechests.setup.Registration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -32,30 +34,26 @@ public class RiddleChests {
 
     }
 
+    @SubscribeEvent
+    public void onServerStarting(ServerStartingEvent event) {
+        var recipeManager = event.getServer().getRecipeManager();
 
-    /*
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public void startServer(FMLServerAboutToStartEvent event) {
-        IReloadableResourceManager manager = event.getServer().getResourceManager();
-        manager.addReloadListener((IResourceManagerReloadListener) resourceManager -> {
-            RecipeManager recipeManager = event.getServer().getRecipeManager();
-            if(!ModObjects.riddleRecipeHelper.hasRecipes(recipeManager)) {
-                Logz.warn("Warning. No riddles loaded! This mod will not work properly!");
-            }
-            if(!ModObjects.alphabetRecipeHelper.hasRecipes(recipeManager)) {
-                Logz.warn("Warning. No alphabets loaded! This mod will not work properly!");
-            }
-            if(!ModObjects.lootTableMappingRecipeHelper.hasRecipes(recipeManager)) {
-                Logz.warn("Warning. No loot table mappings loaded! This mod will not work properly!");
-            }
+        if(!Registration.riddleRecipeHelper.hasRecipes(recipeManager)) {
+            RiddleChests.LOGGER.warn("Warning. No riddles loaded! This mod will not work properly!");
+        }
 
-            Logz.info("Loaded {} riddles, {} loot table mappings and {} alphabets",
-                ModObjects.riddleRecipeHelper.getRecipeCount(recipeManager),
-                ModObjects.lootTableMappingRecipeHelper.getRecipeCount(recipeManager),
-                ModObjects.alphabetRecipeHelper.getRecipeCount(recipeManager)
-            );
-        });
+        if(!Registration.alphabetRecipeHelper.hasRecipes(recipeManager)) {
+            RiddleChests.LOGGER.warn("Warning. No alphabets loaded! This mod will not work properly!");
+        }
+
+        if(!Registration.lootMappingRecipeHelper.hasRecipes(recipeManager)) {
+            RiddleChests.LOGGER.warn("Warning. No loot table mappings loaded! This mod will not work properly!");
+        }
+
+        RiddleChests.LOGGER.info("Loaded {} riddles, {} loot table mappings and {} alphabets",
+                Registration.riddleRecipeHelper.getRecipeCount(recipeManager),
+                Registration.lootMappingRecipeHelper.getRecipeCount(recipeManager),
+                Registration.alphabetRecipeHelper.getRecipeCount(recipeManager)
+        );
     }
-
-     */
 }

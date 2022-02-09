@@ -1,11 +1,13 @@
 package com.davenonymous.riddlechests.setup;
 
 
+import com.davenonymous.riddlechests.RiddleChests;
 import com.davenonymous.riddlechests.caps.CapabilityRiddleChunk;
 import com.davenonymous.riddlechests.caps.RiddledCapabilityProvider;
 import com.davenonymous.riddlechests.command.ModCommands;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -44,5 +46,28 @@ public class ForgeEventHandlers {
 	@SubscribeEvent
 	public void onRegisterCommands(RegisterCommandsEvent event) {
 		ModCommands.register(event.getDispatcher());
+	}
+
+	@SubscribeEvent
+	public void onRecipesUpdated(RecipesUpdatedEvent event) {
+		var recipeManager = event.getRecipeManager();
+
+		if(!Registration.riddleRecipeHelper.hasRecipes(recipeManager)) {
+			RiddleChests.LOGGER.warn("Warning. No riddles loaded! This mod will not work properly!");
+		}
+
+		if(!Registration.alphabetRecipeHelper.hasRecipes(recipeManager)) {
+			RiddleChests.LOGGER.warn("Warning. No alphabets loaded! This mod will not work properly!");
+		}
+
+		if(!Registration.lootMappingRecipeHelper.hasRecipes(recipeManager)) {
+			RiddleChests.LOGGER.warn("Warning. No loot table mappings loaded! This mod will not work properly!");
+		}
+
+		RiddleChests.LOGGER.info("Loaded {} riddles, {} loot table mappings and {} alphabets",
+				Registration.riddleRecipeHelper.getRecipeCount(recipeManager),
+				Registration.lootMappingRecipeHelper.getRecipeCount(recipeManager),
+				Registration.alphabetRecipeHelper.getRecipeCount(recipeManager)
+		);
 	}
 }

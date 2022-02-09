@@ -31,29 +31,5 @@ public class RiddleChests {
         IEventBus modbus = FMLJavaModLoadingContext.get().getModEventBus();
         modbus.addListener(ModSetup::init);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modbus.addListener(ClientSetup::init));
-
-    }
-
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        var recipeManager = event.getServer().getRecipeManager();
-
-        if(!Registration.riddleRecipeHelper.hasRecipes(recipeManager)) {
-            RiddleChests.LOGGER.warn("Warning. No riddles loaded! This mod will not work properly!");
-        }
-
-        if(!Registration.alphabetRecipeHelper.hasRecipes(recipeManager)) {
-            RiddleChests.LOGGER.warn("Warning. No alphabets loaded! This mod will not work properly!");
-        }
-
-        if(!Registration.lootMappingRecipeHelper.hasRecipes(recipeManager)) {
-            RiddleChests.LOGGER.warn("Warning. No loot table mappings loaded! This mod will not work properly!");
-        }
-
-        RiddleChests.LOGGER.info("Loaded {} riddles, {} loot table mappings and {} alphabets",
-                Registration.riddleRecipeHelper.getRecipeCount(recipeManager),
-                Registration.lootMappingRecipeHelper.getRecipeCount(recipeManager),
-                Registration.alphabetRecipeHelper.getRecipeCount(recipeManager)
-        );
     }
 }

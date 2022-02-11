@@ -17,10 +17,6 @@ This mod adds chests similiar to those in Betrayal at Krondor to the minecraft w
 The chance that a vanilla loot chest will be replaced by a Riddle Chest can be configured in the options. No additional
 chests will be generated.
 
-The system behind this currently requires a Mixin/CoreMod to detect generated lootChests. If modded structures
-do not use the `StructurePiece.generateChest()` methods we have currently no efficient way of detecting their
-chests and can not replace them.
-
 If you want certain loot chests to never be touched you can prevent that by configuring the `loottableBlacklist`
 option and include the resource name of the loottable you want to keep intact, e.g. `minecraft:chests/spawn_bonus_chest`.
 

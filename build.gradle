@@ -154,6 +154,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
     implementation fg.deobf("mezz.jei:jei-${jei_version}")
 
+    compileOnly fg.deobf("curse.maven:lootr-361276:3632374")
     implementation fg.deobf("curse.maven:the-one-probe-245211:3586969")
     implementation fg.deobf("curse.maven:configured-457570:3559398")
 

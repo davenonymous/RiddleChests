@@ -1,6 +1,7 @@
 package com.davenonymous.riddlechests.block;
 
 
+import com.davenonymous.riddlechests.setup.Registration;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -13,8 +14,8 @@ import net.minecraft.world.level.block.Block;
 import java.util.List;
 
 public class RiddleChestBlockItem extends BlockItem {
-    public RiddleChestBlockItem(Block blockIn, Properties builder) {
-        super(blockIn, builder);
+    public RiddleChestBlockItem(Properties builder) {
+        super(Registration.RIDDLECHEST.get(), builder);
     }
 
     @Override

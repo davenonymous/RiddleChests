@@ -2,6 +2,7 @@ package com.davenonymous.riddlechests.setup;
 
 import com.davenonymous.libnonymous.registration.RegistrationHelper;
 import com.davenonymous.riddlechests.block.RiddleChestBlock;
+import com.davenonymous.riddlechests.block.RiddleChestBlockItem;
 import com.davenonymous.riddlechests.block.RiddleChestTileEntity;
 import com.davenonymous.riddlechests.gui.OpenRiddleChestContainer;
 import com.davenonymous.riddlechests.gui.RiddleChestContainer;
@@ -63,7 +64,7 @@ public class Registration {
 	public static final Item.Properties ITEM_PROPERTIES = new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS);
 
 	public static final RegistryObject<Block> RIDDLECHEST = BLOCKS.register("riddlechest", () -> new RiddleChestBlock());
-	public static final RegistryObject<Item> RIDDLECHEST_ITEM = RegistrationHelper.fromBlock(RIDDLECHEST, ITEMS, ITEM_PROPERTIES);
+	public static final RegistryObject<Item> RIDDLECHEST_ITEM = ITEMS.register(RIDDLECHEST.getId().getPath(), () -> new RiddleChestBlockItem(ITEM_PROPERTIES));
 
 	public static final RegistryObject<BlockEntityType<RiddleChestTileEntity>> RIDDLECHEST_BLOCKENTITY = BLOCK_ENTITIES.register("riddlechest", () -> BlockEntityType.Builder.of(RiddleChestTileEntity::new, RIDDLECHEST.get())
 			.build(null));

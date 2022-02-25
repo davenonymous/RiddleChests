@@ -2,11 +2,16 @@ package com.davenonymous.riddlechests.block;
 
 import com.davenonymous.libnonymous.base.BaseBlock;
 import com.davenonymous.libnonymous.base.BaseLanguageProvider;
+import com.davenonymous.libnonymous.compat.top.ITopInfoProvider;
 import com.davenonymous.riddlechests.gui.OpenRiddleChestContainer;
 import com.davenonymous.riddlechests.gui.RiddleChestContainer;
 import com.davenonymous.riddlechests.network.Networking;
 import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
 import com.davenonymous.riddlechests.setup.Registration;
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.ProbeMode;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -42,15 +47,14 @@ import net.minecraftforge.network.NetworkHooks;
 import javax.annotation.Nullable;
 
 
-public class RiddleChestBlock extends BaseBlock {
+public class RiddleChestBlock extends BaseBlock implements ITopInfoProvider {
     private final VoxelShape shapeX = Shapes.box(0.15f, 0.005f, 0.065f, 0.85f, 0.7f, 0.935f);
     private final VoxelShape shapeZ = Shapes.box(0.065f, 0.005f, 0.15f, 0.935f, 0.7f, 0.85f);
 
     public RiddleChestBlock() {
         super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN)
             .strength(15.0f, 1200.0f)
-            .sound(SoundType.WOOD)
-            .requiresCorrectToolForDrops());
+            .sound(SoundType.WOOD));
     }
 
     @Override
@@ -171,5 +175,18 @@ public class RiddleChestBlock extends BaseBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new RiddleChestTileEntity(pPos, pState);
+    }
+
+    @Override
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, Player player, Level level, BlockState blockState, IProbeHitData iProbeHitData) {
+        if(!(level.getBlockEntity(iProbeHitData.getPos()) instanceof RiddleChestTileEntity riddleChestTile)) {
+            return;
+        }
+
+        if(riddleChestTile.solved) {
+            probeInfo.mcText(new TranslatableComponent("riddle_chest.solved").withStyle(ChatFormatting.DARK_GREEN));
+        } else {
+            probeInfo.mcText(new TranslatableComponent("riddle_chest.unsolved").withStyle(ChatFormatting.DARK_RED));
+        }
     }
 }

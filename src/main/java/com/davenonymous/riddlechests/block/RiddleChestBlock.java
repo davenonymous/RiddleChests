@@ -3,6 +3,7 @@ package com.davenonymous.riddlechests.block;
 import com.davenonymous.libnonymous.base.BaseBlock;
 import com.davenonymous.libnonymous.base.BaseLanguageProvider;
 import com.davenonymous.libnonymous.compat.top.ITopInfoProvider;
+import com.davenonymous.libnonymous.helper.SpawnHelper;
 import com.davenonymous.riddlechests.gui.OpenRiddleChestContainer;
 import com.davenonymous.riddlechests.gui.RiddleChestContainer;
 import com.davenonymous.riddlechests.network.Networking;
@@ -42,6 +43,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -154,12 +156,13 @@ public class RiddleChestBlock extends BaseBlock implements ITopInfoProvider {
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if(worldIn.getBlockEntity(pos) instanceof RiddleChestTileEntity chestTile) {
-            if(chestTile.solved) {
-                // TODO: InventoryHelper.dropItems(worldIn, pos, chestTile.getContentStacks());
+            if(chestTile.solved && chestTile.handler.resolve().isPresent()) {
+                SpawnHelper.dropItemHandlerContents(chestTile.handler.resolve().get(), worldIn, pos, true);
             }
 
             return;
         }
+
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 

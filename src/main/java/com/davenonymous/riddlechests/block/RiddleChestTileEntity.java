@@ -38,12 +38,18 @@ public class RiddleChestTileEntity extends BaseBlockEntity<RiddleChestTileEntity
     @Store(storeWithItem = true, sendInUpdatePackage = true)
     public ResourceLocation linkedRiddle;
 
-    private LazyOptional<ItemStackHandler> handler = LazyOptional.of(this::createHandler);
+    public LazyOptional<ItemStackHandler> handler = LazyOptional.of(this::createHandler);
 
     public RiddleInfo cachedRiddle;
 
     public RiddleChestTileEntity(BlockPos pos, BlockState state) {
         super(Registration.RIDDLECHEST_BLOCKENTITY.get(), pos, state);
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        handler.invalidate();
     }
 
     public RiddleInfo getRiddle() {

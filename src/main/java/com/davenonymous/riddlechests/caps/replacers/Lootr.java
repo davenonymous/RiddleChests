@@ -1,6 +1,5 @@
 package com.davenonymous.riddlechests.caps.replacers;
 
-import com.davenonymous.libnonymous.reflections.ChestBlockEntityReflection;
 import com.davenonymous.riddlechests.RiddleChests;
 import com.davenonymous.riddlechests.config.CommonConfig;
 import com.davenonymous.riddlechests.setup.Registration;

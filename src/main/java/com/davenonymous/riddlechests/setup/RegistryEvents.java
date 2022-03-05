@@ -1,21 +1,16 @@
 package com.davenonymous.riddlechests.setup;
 
-import com.davenonymous.libnonymous.base.RecipeData;
-import com.davenonymous.riddlechests.recipe.alphabets.AlphabetInfo;
 import com.davenonymous.riddlechests.recipe.alphabets.AlphabetRecipeHelper;
-import com.davenonymous.riddlechests.recipe.loottable.LootTableMappingInfo;
 import com.davenonymous.riddlechests.recipe.loottable.LootTableMappingRecipeHelper;
-import com.davenonymous.riddlechests.recipe.riddles.RiddleInfo;
 import com.davenonymous.riddlechests.recipe.riddles.RiddleRecipeHelper;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import static com.davenonymous.riddlechests.RiddleChests.MODID;
 
@@ -25,26 +20,14 @@ import static com.davenonymous.riddlechests.RiddleChests.MODID;
 public class RegistryEvents {
 
     @SubscribeEvent
-    public static void createNewRegistry(RegistryEvent.NewRegistry event) {
-        Registration.riddleRecipeType = createRecipeType(RiddleInfo.class, "word");
-        Registration.alphabetRecipeType = createRecipeType(AlphabetInfo.class, "alphabet");
-        Registration.lootMappingRecipeType = createRecipeType(LootTableMappingInfo.class, "loottable_mapping");
+    static void onCommonSetup(FMLCommonSetupEvent event) {
+        Registration.riddleRecipeType = RecipeType.register(new ResourceLocation(MODID, "word").toString());
+        Registration.alphabetRecipeType = RecipeType.register(new ResourceLocation(MODID, "alphabet").toString());
+        Registration.lootMappingRecipeType = RecipeType.register(new ResourceLocation(MODID, "loottable_mapping").toString());
 
         Registration.riddleRecipeHelper = new RiddleRecipeHelper();
         Registration.alphabetRecipeHelper = new AlphabetRecipeHelper();
         Registration.lootMappingRecipeHelper = new LootTableMappingRecipeHelper();
-    }
-
-    private static <T extends RecipeData> RecipeType<T> createRecipeType(Class<T> type, String id) {
-        ResourceLocation recipeTypeResource = new ResourceLocation(MODID, id);
-        RecipeType<T> reg = Registry.register(Registry.RECIPE_TYPE, recipeTypeResource, new RecipeType<T>() {
-            @Override
-            public String toString() {
-                return recipeTypeResource.toString();
-            }
-        });
-
-        return reg;
     }
 
     @SubscribeEvent
